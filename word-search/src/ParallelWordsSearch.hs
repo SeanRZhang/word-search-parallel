@@ -4,7 +4,7 @@ import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.Maybe (fromMaybe)
 import Data.List (nub)
-import Control.Parallel
+import Control.Parallel.Strategies
 
 data Trie = Trie {
     children :: Map.Map Char Trie,
@@ -27,10 +27,10 @@ type Pos = (Int, Int)
 findWords :: [[Char]] -> [String] -> [String]
 findWords board targetWords = 
     let trie = foldr insertWord emptyTrie targetWords
-        results = foldl (\acc word -> 
-            let newResult = searchSingleWord board trie word
-            in newResult `par` (newResult ++ acc)) [] targetWords
-    in nub results
+        -- Use parMap with rdeepseq to force full evaluation in parallel
+        results = parMap rdeepseq (searchSingleWord board trie) targetWords
+    in nub (concat results)
+
 
 searchSingleWord :: [[Char]] -> Trie -> String -> [String]
 searchSingleWord board trie word = 

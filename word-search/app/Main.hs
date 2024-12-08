@@ -5,6 +5,8 @@ import qualified ParallelWordsSearch
 import InputParser 
 import System.Environment (getArgs)
 import Data.Time.Clock (getCurrentTime, diffUTCTime)
+import Control.DeepSeq
+
 
 main :: IO ()
 main = do
@@ -34,7 +36,8 @@ main = do
                                         "sequential" -> SequentialSearch.findWords board wordsList
                                         "parallelwords" -> ParallelWordsSearch.findWords board wordsList
                                         _           -> error "Unknown solution type"
-                            results `seq` return () -- Force evaluation of cases above, otherwise timer is 0s because of lazy evaluation
+
+                            results `deepseq` return () -- Force evaluation of cases above, otherwise timer is 0s because of lazy evaluation
                             mapM_ putStrLn results
                             end <- getCurrentTime -- Put after mapM_, solves the laziness issue
                             putStrLn $ "Time taken: " ++ show (diffUTCTime end start)

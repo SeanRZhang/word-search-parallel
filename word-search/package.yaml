@@ -24,6 +24,7 @@ dependencies:
 - containers >= 0.6.7
 - time == 1.12.2
 - parallel
+- deepseq
 
 ghc-options:
 - -Wall
