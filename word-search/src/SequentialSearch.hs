@@ -1,10 +1,9 @@
-module SequentialSearch where
+module SequentialSearch (findWords, insertWord) where
+
 
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
 import Data.List (nub)
-import Data.Char (isAlpha)
-import System.IO
 
 -- Trie data structure
 data Trie = Trie {
@@ -26,13 +25,13 @@ insertWord (c:cs) trie =
 
 -- Main search function
 findWords :: [[Char]] -> [String] -> [String]
-findWords board words = nub $ concatMap (\(r,c) -> 
+findWords board targetWords = nub $ concatMap (\(r,c) -> 
     searchFromCell board trie r c []
     ) [(r,c) | r <- [0..rows-1], c <- [0..cols-1]]
   where
     rows = length board
     cols = length (head board)
-    trie = foldr insertWord emptyTrie words
+    trie = foldr insertWord emptyTrie targetWords
 
 -- Search from a specific cell
 searchFromCell :: [[Char]] -> Trie -> Int -> Int -> String -> [String]

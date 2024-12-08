@@ -3,7 +3,6 @@ module Main (main) where
 import qualified SequentialSearch
 import qualified ParallelWordsSearch
 import InputParser 
-import System.IO
 import System.Environment (getArgs)
 import Data.Time.Clock (getCurrentTime, diffUTCTime)
 
@@ -17,13 +16,13 @@ main = do
             case lines contents of
                 [boardStr, wordsStr] -> do
                     let board = parseBoard boardStr
-                    let words = parseWords wordsStr
+                    let wordsList = parseWords wordsStr
                     
                     -- Debug output
                     putStrLn "Parsed Board:"
                     mapM_ print board
                     putStrLn "Parsed Words:"
-                    print words
+                    print wordsList
                     
                     if null board || any null board
                         then putStrLn "Error: Invalid board format"
@@ -32,12 +31,12 @@ main = do
                             start <- getCurrentTime
                             let results = 
                                     case solution of
-                                        "sequential" -> SequentialSearch.findWords board words
-                                        "parallelwords" -> ParallelWordsSearch.findWords board words
+                                        "sequential" -> SequentialSearch.findWords board wordsList
+                                        "parallelwords" -> ParallelWordsSearch.findWords board wordsList
                                         _           -> error "Unknown solution type"
                             results `seq` return () -- Force evaluation of cases above, otherwise timer is 0s because of lazy evaluation
-                            end <- getCurrentTime
                             mapM_ putStrLn results
+                            end <- getCurrentTime -- Put after mapM_, solves the laziness issue
                             putStrLn $ "Time taken: " ++ show (diffUTCTime end start)
                 
                 -- Case when input does not have exactly two lines
