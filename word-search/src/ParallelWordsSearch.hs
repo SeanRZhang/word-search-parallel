@@ -1,4 +1,4 @@
-module ParallelWordsSearch where
+module ParallelWordsSearch (findWords, searchSingleWord, searchFromCell) where
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set
@@ -25,11 +25,11 @@ insertWord (c:cs) trie =
 type Pos = (Int, Int)
 
 findWords :: [[Char]] -> [String] -> [String]
-findWords board words = 
-    let trie = foldr insertWord emptyTrie words
+findWords board targetWords = 
+    let trie = foldr insertWord emptyTrie targetWords
         results = foldl (\acc word -> 
             let newResult = searchSingleWord board trie word
-            in newResult `par` (newResult ++ acc)) [] words
+            in newResult `par` (newResult ++ acc)) [] targetWords
     in nub results
 
 searchSingleWord :: [[Char]] -> Trie -> String -> [String]
