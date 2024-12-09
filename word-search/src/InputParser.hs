@@ -1,4 +1,4 @@
-module InputParser where
+module InputParser (parseBoard, parseWords) where
 
 import Data.Char (isAlpha)
 
@@ -40,8 +40,8 @@ parseBoard input =
 parseWords :: String -> [String]
 parseWords input = 
     let content = init $ tail input  -- Remove outer brackets
-        words = splitWords content
-    in map (filter isAlpha) words
+        wordsList = splitWords content
+    in map (filter isAlpha) wordsList
   where
     splitWords :: String -> [String]
     splitWords [] = []

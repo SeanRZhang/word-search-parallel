@@ -1,10 +1,10 @@
-module ParallelWordsSearch where
+module ParallelWordsSearch (findWords, searchSingleWord, searchFromCell) where
 
 import qualified Data.Map as Map
 import qualified Data.Set as Set
 import Data.Maybe (fromMaybe)
 import Data.List (nub)
-import Control.Parallel
+import Control.Parallel.Strategies
 
 data Trie = Trie {
     children :: Map.Map Char Trie,
@@ -25,12 +25,12 @@ insertWord (c:cs) trie =
 type Pos = (Int, Int)
 
 findWords :: [[Char]] -> [String] -> [String]
-findWords board words = 
-    let trie = foldr insertWord emptyTrie words
-        results = foldl (\acc word -> 
-            let newResult = searchSingleWord board trie word
-            in newResult `par` (newResult ++ acc)) [] words
-    in nub results
+findWords board targetWords = 
+    let trie = foldr insertWord emptyTrie targetWords
+        -- Use parMap with rdeepseq to force full evaluation in parallel
+        results = parMap rdeepseq (searchSingleWord board trie) targetWords
+    in nub (concat results)
+
 
 searchSingleWord :: [[Char]] -> Trie -> String -> [String]
 searchSingleWord board trie word = 

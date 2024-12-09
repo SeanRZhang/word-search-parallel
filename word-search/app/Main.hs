@@ -4,9 +4,9 @@ import qualified SequentialSearch
 import qualified ParallelWordsSearch
 import qualified ParallelWordsSearch2
 import InputParser 
-import System.IO
 import System.Environment (getArgs)
 import Data.Time.Clock (getCurrentTime, diffUTCTime)
+import Control.DeepSeq
 import Data.Char (isDigit)
 
 main :: IO ()
@@ -24,13 +24,13 @@ main = do
             case lines contents of
                 [boardStr, wordsStr] -> do
                     let board = parseBoard boardStr
-                    let words = parseWords wordsStr
+                    let wordsList = parseWords wordsStr
                     
                     -- Debug output
                     putStrLn "Parsed Board:"
                     mapM_ print board
                     putStrLn "Parsed Words:"
-                    print words
+                    print wordsList
                     
                     if null board || any null board
                         then putStrLn "Error: Invalid board format"
@@ -43,9 +43,9 @@ main = do
                                         "parallelwords" -> ParallelWordsSearch.findWords board words
                                         "parallelwords2" -> ParallelWordsSearch2.findWordsParallel subgrids board words
                                         _ -> error "Invalid solution argument"
-                            results `seq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
-                            end <- getCurrentTime
+                            results `deepseq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
                             mapM_ putStrLn results
+                            end <- getCurrentTime -- Put after mapM_, solves the laziness issue
                             putStrLn $ "Time taken: " ++ show (diffUTCTime end start)
                 
                 -- Case when input does not have exactly two lines
