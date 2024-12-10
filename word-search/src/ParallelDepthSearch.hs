@@ -1,4 +1,4 @@
-module SequentialSearch2 (findWords, insertWord, Trie(..), emptyTrie, searchFromCell) where
+module ParallelDepthSearch (findWords, insertWord, Trie(..), emptyTrie, searchFromCell) where
 
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)

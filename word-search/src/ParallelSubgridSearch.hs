@@ -1,11 +1,11 @@
-module ParallelWordsSearch2 (findWordsParallel) where
+module ParallelSubgridSearch (findWordsSubgrids) where
 
 import Data.List (nub)
 import Control.Parallel.Strategies
 import qualified SequentialSearch
 
-findWordsParallel :: Int -> [[Char]] -> [String] -> [String]
-findWordsParallel splits board wordsList =
+findWordsSubgrids :: Int -> [[Char]] -> [String] -> [String]
+findWordsSubgrids splits board wordsList =
     let subBoards = splitBoard splits board
         trie = foldr SequentialSearch.insertWord SequentialSearch.emptyTrie wordsList
         results = parMap rdeepseq (\subBoard -> findWordsTrie subBoard trie) subBoards

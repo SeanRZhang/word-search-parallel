@@ -1,9 +1,9 @@
 module Main (main) where
 
 import qualified SequentialSearch
-import qualified SequentialSearch2
+import qualified ParallelDepthSearch
 import qualified ParallelWordsSearch
-import qualified ParallelWordsSearch2
+import qualified ParallelSubgridSearch
 import InputParser 
 import System.Environment (getArgs)
 import Data.Time.Clock (getCurrentTime, diffUTCTime)
@@ -39,10 +39,8 @@ main = do
                             start <- getCurrentTime
                             let results = 
                                     case solution of
-                                        "sequential" -> SequentialSearch.findWords board wordsList
-                                        "parallelwords" -> ParallelWordsSearch.findWords board wordsList
-                                        "parallelwords2" -> ParallelWordsSearch2.findWordsParallel subgrids board wordsList
-                                        _ -> error "Invalid solution argument"
+                                        "parallelsubgrids" -> ParallelSubgridSearch.findWordsSubgrids subgrids board wordsList
+                                        _ -> error "Invalid solution argument. Only 'parallelsubgrids' requires additional subgrids argument."
                             results `deepseq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
                             mapM_ putStrLn results
                             end <- getCurrentTime -- Put after mapM_, solves the laziness issue
@@ -74,12 +72,12 @@ main = do
                             let results = 
                                     case solution of
                                         "sequential" -> SequentialSearch.findWords board wordsList
-                                        "sequential2" -> SequentialSearch2.findWords board wordsList
+                                        "paralleldepth" -> ParallelDepthSearch.findWords board wordsList
                                         "parallelwords" -> ParallelWordsSearch.findWords board wordsList
                                         _ -> error "Invalid solution argument. Note: 'parallelwords2' requires additional subgrids argument."
-                            results `seq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
-                            end <- getCurrentTime
+                            results `deepseq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
                             mapM_ putStrLn results
+                            end <- getCurrentTime
                             putStrLn $ "Time taken: " ++ show (diffUTCTime end start)
                 
                 -- Case when input does not have exactly two lines
