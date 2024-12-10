@@ -1,20 +1,19 @@
-module ParallelWordsSearch2 where
+module ParallelWordsSearch2 (findWordsParallel) where
 
 import Data.List (nub)
 import Control.Parallel.Strategies
-import SequentialSearch
+import qualified SequentialSearch
 
--- Main search function
 findWordsParallel :: Int -> [[Char]] -> [String] -> [String]
-findWordsParallel splits board words =
+findWordsParallel splits board wordsList =
     let subBoards = splitBoard splits board
-        trie = foldr insertWord emptyTrie words
+        trie = foldr SequentialSearch.insertWord SequentialSearch.emptyTrie wordsList
         results = parMap rdeepseq (\subBoard -> findWordsTrie subBoard trie) subBoards
     in nub (concat results)
 
-findWordsTrie :: [[Char]] -> Trie -> [String]
+findWordsTrie :: [[Char]] -> SequentialSearch.Trie -> [String]
 findWordsTrie board trie = nub $ concatMap (\(r,c) -> 
-    searchFromCell board trie r c []
+    SequentialSearch.searchFromCell board trie r c []
     ) [(r,c) | r <- [0..rows-1], c <- [0..cols-1]]
   where
     rows = length board
