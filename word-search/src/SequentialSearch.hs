@@ -1,5 +1,4 @@
-module SequentialSearch (findWords, insertWord) where
-
+module SequentialSearch (findWords, insertWord, Trie(..), emptyTrie, searchFromCell) where
 
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)

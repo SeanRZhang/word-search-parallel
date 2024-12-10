@@ -7,7 +7,6 @@ import InputParser
 import System.Environment (getArgs)
 import Data.Time.Clock (getCurrentTime, diffUTCTime)
 import Control.DeepSeq
-import Data.Char (isDigit)
 
 main :: IO ()
 main = do
@@ -39,9 +38,9 @@ main = do
                             start <- getCurrentTime
                             let results = 
                                     case solution of
-                                        "sequential" -> SequentialSearch.findWords board words
-                                        "parallelwords" -> ParallelWordsSearch.findWords board words
-                                        "parallelwords2" -> ParallelWordsSearch2.findWordsParallel subgrids board words
+                                        "sequential" -> SequentialSearch.findWords board wordsList
+                                        "parallelwords" -> ParallelWordsSearch.findWords board wordsList
+                                        "parallelwords2" -> ParallelWordsSearch2.findWordsParallel subgrids board wordsList
                                         _ -> error "Invalid solution argument"
                             results `deepseq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
                             mapM_ putStrLn results
@@ -58,13 +57,13 @@ main = do
             case lines contents of
                 [boardStr, wordsStr] -> do
                     let board = parseBoard boardStr
-                    let words = parseWords wordsStr
+                    let wordsList = parseWords wordsStr
                     
                     -- Debug output
                     putStrLn "Parsed Board:"
                     mapM_ print board
                     putStrLn "Parsed Words:"
-                    print words
+                    print wordsList
                     
                     if null board || any null board
                         then putStrLn "Error: Invalid board format"
@@ -73,8 +72,8 @@ main = do
                             start <- getCurrentTime
                             let results = 
                                     case solution of
-                                        "sequential" -> SequentialSearch.findWords board words
-                                        "parallelwords" -> ParallelWordsSearch.findWords board words
+                                        "sequential" -> SequentialSearch.findWords board wordsList
+                                        "parallelwords" -> ParallelWordsSearch.findWords board wordsList
                                         _ -> error "Invalid solution argument. Note: 'parallelwords2' requires additional subgrids argument."
                             results `seq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
                             end <- getCurrentTime
