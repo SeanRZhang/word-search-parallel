@@ -29,8 +29,8 @@ library
       Lib
       ParallelWordsSearch
       ParallelWordsSearch2
-      ParallelWordsSearchWithDepth
       SequentialSearch
+      SequentialSearch2
   other-modules:
       Paths_word_search
   autogen-modules:
