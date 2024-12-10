@@ -1,6 +1,7 @@
 module Main (main) where
 
 import qualified SequentialSearch
+import qualified SequentialSearch2
 import qualified ParallelWordsSearch
 import qualified ParallelWordsSearch2
 import InputParser 
@@ -73,6 +74,7 @@ main = do
                             let results = 
                                     case solution of
                                         "sequential" -> SequentialSearch.findWords board wordsList
+                                        "sequential2" -> SequentialSearch2.findWords board wordsList
                                         "parallelwords" -> ParallelWordsSearch.findWords board wordsList
                                         _ -> error "Invalid solution argument. Note: 'parallelwords2' requires additional subgrids argument."
                             results `seq` return () -- Force evaluation of cases above, otherwise timer is 0s due to lazy evaluation
