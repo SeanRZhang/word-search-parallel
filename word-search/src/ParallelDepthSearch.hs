@@ -31,7 +31,6 @@ findWords depth board targetWords =
     cols = length (head board)
     trie = foldr insertWord emptyTrie targetWords  
 
-
 searchFromCell :: [[Char]] -> Trie -> Set (Int, Int) -> Int -> Int -> String -> Int -> Int -> Int -> [String]
 searchFromCell board trie visited row col currWord depth rows cols
     | row < 0 || row >= rows || col < 0 || col >= cols = [] 
