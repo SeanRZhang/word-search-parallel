@@ -14,14 +14,14 @@ main = do
     args <- getArgs
     case args of
         [filename, solution] -> processFile filename solution Nothing
-        [filename, solution, subgridsStr] ->
-            case reads subgridsStr :: [(Int, String)] of
+        [filename, solution, paramStr] ->
+            case reads paramStr :: [(Int, String)] of
                 [(n, "")] | n > 0 -> processFile filename solution (Just n)
-                _ -> error "Invalid input for subgrids: please provide a positive integer."
-        _ -> putStrLn "Usage: ./wordsearch <filename> <solution> <optional: number of subgrids>"
+                _ -> error "Invalid input for number of subgrid / depth: please provide a positive integer."
+        _ -> putStrLn "Usage: ./wordsearch <filename> <solution> <optional: number of subgrid / depth>"
 
 processFile :: FilePath -> String -> Maybe Int -> IO ()
-processFile filename solution subgrids = do
+processFile filename solution param = do
     contents <- readFile filename
     case lines contents of
         [boardStr, wordsStr] -> do
@@ -39,7 +39,7 @@ processFile filename solution subgrids = do
                 else do
                     -- Time the findWords operation
                     start <- getCurrentTime
-                    let results = runSolution solution board wordsList subgrids
+                    let results = runSolution solution board wordsList param
                     results `deepseq` return () -- Force evaluation
                     mapM_ putStrLn results
                     end <- getCurrentTime
@@ -47,13 +47,16 @@ processFile filename solution subgrids = do
         _ -> putStrLn "Error: Input file must contain exactly two lines"
 
 runSolution :: String -> [[Char]] -> [String] -> Maybe Int -> [String]
-runSolution solution board wordsList subgrids =
+runSolution solution board wordsList param =
     case solution of
         "sequential" -> SequentialSearch.findWords board wordsList
         "parallelwords" -> ParallelWordsSearch.findWords board wordsList
-        "paralleldepth" -> ParallelDepthSearch.findWords board wordsList
+        "paralleldepth" ->
+            case param of
+                Just n -> ParallelDepthSearch.findWords n board wordsList
+                Nothing -> error "Missing depth argument for 'paralleldepth' solution."
         "parallelsubgrids" ->
-            case subgrids of
+            case param of
                 Just n -> ParallelSubgridSearch.findWordsSubgrids n board wordsList
                 Nothing -> error "Missing subgrids argument for 'parallelsubgrids' solution."
         _ -> error "Invalid solution argument."
