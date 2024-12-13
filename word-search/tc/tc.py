@@ -4,8 +4,8 @@ import string
 def generate_random_word(length):
     return ''.join(random.choice(string.ascii_lowercase) for _ in range(length))
 
-def generate_words(num_words, max_length):
-    return [generate_random_word(random.randint(2, max_length)) for _ in range(num_words)]
+def generate_words(num_words, max_length, min_length):
+    return [generate_random_word(random.randint(min_length, max_length)) for _ in range(num_words)]
 
 def create_empty_grid(n, m):
     return [['' for _ in range(m)] for _ in range(n)]
@@ -21,9 +21,7 @@ def place_word_in_grid(grid, word):
     word_len = len(word)
     n, m = len(grid), len(grid[0])
 
-
-    for _ in range(100): 
-
+    for _ in range(100):
         start_x = random.randint(0, n - 1)
         start_y = random.randint(0, m - 1)
         dx, dy = get_random_direction()
@@ -58,8 +56,9 @@ def main():
     n = int(input("Enter the number of rows (n): "))
     m = int(input("Enter the number of columns (m): "))
     num_words = int(input("Enter the number of words: "))
+    min_word_length = int(input("Enter the minimum length of each word: "))  
     max_word_length = int(input("Enter the maximum length of each word: "))
-    words = generate_words(num_words, max_length=max_word_length)
+    words = generate_words(num_words, max_length=max_word_length, min_length=min_word_length)
     grid = create_empty_grid(n, m)
     for word in words:
         place_word_in_grid(grid, word)
