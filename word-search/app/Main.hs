@@ -54,10 +54,6 @@ runSolution solution board wordsList param =
         "paralleldepth" ->
             case param of
                 Just n -> ParallelDepthSearch.findWords n board wordsList
-                    --let maxWordLength = maximum (map length wordsList)
-                    --in if n < maxWordLength
-                    --then error $ "Input depth " ++ show n ++ " is too small. The largest word length is " ++ show maxWordLength ++ "."
-                    --else ParallelDepthSearch.findWords n board wordsList
                 Nothing -> error "Missing depth argument for 'paralleldepth' solution."
         "parallelsubgrids" ->
             case param of
