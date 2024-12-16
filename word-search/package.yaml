@@ -1,9 +1,9 @@
 name: word-search
 version: 0.1.0.0
-github: "githubuser/word-search"
+github: "aw471/PFP-Final-Project"
 license: BSD-3-Clause
-author: "Author name here"
-maintainer: "example@example.com"
+author: Sean Zhang, Ardrian Wong, Keith Lo 
+maintainer: "srz2116@columbia.edu"
 copyright: "2024 Author name here"
 
 extra-source-files:
@@ -54,13 +54,3 @@ executables:
     dependencies:
       - word-search
 
-tests:
-  word-search-test:
-    main: Spec.hs
-    source-dirs: test
-    ghc-options:
-      - -threaded
-      - -rtsopts
-      - -with-rtsopts=-N
-    dependencies:
-      - word-search

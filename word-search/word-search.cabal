@@ -7,10 +7,10 @@ cabal-version: 2.2
 name:           word-search
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/word-search#readme>
-homepage:       https://github.com/githubuser/word-search#readme
-bug-reports:    https://github.com/githubuser/word-search/issues
-author:         Author name here
-maintainer:     example@example.com
+homepage:       https://github.com/aw471/PFP-Final-Project#readme
+bug-reports:    https://github.com/aw471/PFP-Final-Project/issues
+author:         Sean Zhang, Ardrian Wong, Keith Lo
+maintainer:     srz2116@columbia.edu
 copyright:      2024 Author name here
 license:        BSD-3-Clause
 license-file:   LICENSE
@@ -21,12 +21,11 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/word-search
+  location: https://github.com/aw471/PFP-Final-Project
 
 library
   exposed-modules:
       InputParser
-      Lib
       ParallelDepthSearch
       ParallelSubgridSearch
       ParallelWordsSearch
@@ -55,25 +54,6 @@ executable word-search-exe
   hs-source-dirs:
       app
   ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -O2 -threaded -rtsopts -with-rtsopts=-N -O2
-  build-depends:
-      base >=4.7 && <5
-    , containers >=0.6.7
-    , deepseq
-    , parallel
-    , time ==1.12.2
-    , word-search
-  default-language: Haskell2010
-
-test-suite word-search-test
-  type: exitcode-stdio-1.0
-  main-is: Spec.hs
-  other-modules:
-      Paths_word_search
-  autogen-modules:
-      Paths_word_search
-  hs-source-dirs:
-      test
-  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -O2 -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
     , containers >=0.6.7
